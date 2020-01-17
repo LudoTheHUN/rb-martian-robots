@@ -1,22 +1,62 @@
 # rb-martian-robots
 
-A Clojure library designed to ... well, that part is up to you.
+A Clojure library designed to solve the rb martian robot problem.
+
+## Notes for rb
+
+* Basic entry point via a main function. KISS for now.
+  * Would use https://github.com/clojure/tools.cli for a more sophisticated command line entry point.
+* Keeping template License.
+
+## Prerequisites
+
+`lein` - https://leiningen.org/
+
+`java`
 
 ## Usage
 
-FIXME
+Single `lain` run:
+
+```
+lein run <input-filename> <output-filename>
+```
+
+or build
+
+```
+lein uberjar
+```
+
+and run jar artifact:
+
+```
+java -jar target/rb-martian-robots-0.1.0-SNAPSHOT-standalone.jar <input-filename> <output-filename>
+
+```
+
+## TODOs
+
+* Test with sample data
+* KISS entry point.
+* read a file with input data
+* parse file
+* business logic breakdown
+* problem representation
+* tests in representation space
+* encode rules
+* processing flow
+* write output file
+* build uberjar
+* test against sample data with uberjar.
+
+[comment]: <>  (
+Setting up ssh for github
+`export GIT_SSH=/Users/ludwik/code/clojure/rb-martian-robots/gitssh.sh`
+)
+
+
 
 ## License
 
 Copyright © 2020 FIXME
-
-This program and the accompanying materials are made available under the
-terms of the Eclipse Public License 2.0 which is available at
-http://www.eclipse.org/legal/epl-2.0.
-
-This Source Code may also be made available under the following Secondary
-Licenses when the conditions for such availability set forth in the Eclipse
-Public License, v. 2.0 are satisfied: GNU General Public License as published by
-the Free Software Foundation, either version 2 of the License, or (at your
-option) any later version, with the GNU Classpath Exception which is available
-at https://www.gnu.org/software/classpath/license.html.

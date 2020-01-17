@@ -1,6 +1,14 @@
-(ns rb-martian-robots.core)
+(ns rb-martian-robots.core
+  (:gen-class))
 
 (defn foo
   "I don't do a whole lot."
   [x]
   (println x "Hello, World!"))
+
+
+(defn -main
+  "Application entry point"
+  [& args]
+  (println "foo" args))
+
