@@ -43,7 +43,9 @@
         world-size (read-x-y (first lines))
         per-robot-vectors (read-robot-lines (rest lines))]
     {:world-size world-size
-     :robots (vec (map parse-robot-vector per-robot-vectors))}))
+     :robots (vec (map parse-robot-vector per-robot-vectors))
+     :scents #{}
+     :done-robots []}))
 
 (defn rotation [orientation instruction]
     (case [orientation instruction]
@@ -99,12 +101,15 @@
       (move-robot world)
       drop-instruction))
 
-(defn off-world? [robot world]
-    (let [[x y] (:position robot)
-          [wx wy] (:world-size world)]
+(defn off-world?
+  "Test if a robot has falen off the world"
+  [robot world]
+  (let [[x y] (:position robot)
+        [wx wy] (:world-size world)]
       (or (< x 0) (< y 0) (> x wx) (> y wy))))
 
 (defn do-robot [start-robot world]
+  "does all robot instructions, return final robot"
   (loop [robot start-robot]
     (println robot)  ;; TODO remove
     (let [ticked-robot (tick-robot robot world)]
@@ -113,9 +118,28 @@
         robot
 
         (off-world? ticked-robot world)
-        (conj robot {:lost? true})
+        (if (contains? (:scents world) (:position robot))
+            (recur (conj ticked-robot {:position (:position robot)}))
+          (conj robot {:lost? true}))
 
         true (recur ticked-robot)))))
+
+
+(defn tick-world
+  "takes a world and returns new world given a robot"
+  [world robot]
+  (let [robot (do-robot robot world)]
+    (if (:lost? robot)
+      (-> world
+          (update-in [:done-robots] #(conj % robot))
+          (update-in [:scents] #(conj % (:position robot))))
+      (update-in world [:done-robots] #(conj % robot)))))  ;; TODO Not dry enough.
+
+(defn do-world [world]
+  (let [robots (:robots world)]
+    (reduce tick-world world robots)))
+
+
 
 
 ;; TODO lost? world update
@@ -139,12 +163,7 @@
 a-robot
 (tick-robot a-robot a-world)
 (do-robot a-robot a-world)
-
-
-(defn tick-world [world])
-
-
-(tick-world (parse-input (read-robots-file "input.robots")))
+(do-world a-world)
 
 ;;TODO tests
 

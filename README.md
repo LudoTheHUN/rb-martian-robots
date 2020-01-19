@@ -44,8 +44,9 @@ java -jar target/rb-martian-robots-0.1.0-SNAPSHOT-standalone.jar <input-filename
 * DONE parse file
 * business logic breakdown
   * DONE rotation
-  * Moving
-  * Falling of edge
+  * DONE Moving
+  * DONE Falling off edge
+  * leave cent
 * problem representation
 * tests in representation space
 * processing flow
