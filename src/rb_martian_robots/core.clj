@@ -2,12 +2,6 @@
   (:require [clojure.string :as str])
   (:gen-class))
 
-(defn foo
-  "I don't do a whole lot."
-  [x]
-  (println x "Hello, World!"))
-
-
 (defn -main
   "Application entry point"
   [& args]
@@ -38,7 +32,7 @@
    :instructions (filter #(not (empty-str? %)) (str/split (second robot-vector) #""))})
 
 (defn parse-input [s]
-  "prase the input string into a data representation"
+  "Prase the input string into a data representation"
   (let [lines (str/split-lines s)
         world-size (read-x-y (first lines))
         per-robot-vectors (read-robot-lines (rest lines))]
@@ -71,27 +65,10 @@
                    "E" [(+ x 1) y]
                    "S" [x (- y 1)]
                    "W" [(- x 1) y])))
-    ;;TODO handle scent logic here from world
     robot))
-
-
 
 (defn drop-instruction [robot]
   (update-in robot [:instructions] #(vec (rest %))))
-
-
-(move-robot {:position [3 4] :orientation "E" :instructions ["F"]} {})
-
-
-
-
-
-
-;;TODO tests
-(reduce rotation "N" ["R" "R" "R" "R"])
-(reduce rotation "N" ["S" "S" "S" "S"])
-
-
 
 (defn tick-robot
   "Ticks through one robot instruction given a world and a robot, returns ticked robot"
@@ -99,6 +76,7 @@
   (-> robot
       rotate-robot
       (move-robot world)
+      ; NOTE: More robot instructions can be added here
       drop-instruction))
 
 (defn off-world?
@@ -109,9 +87,8 @@
       (or (< x 0) (< y 0) (> x wx) (> y wy))))
 
 (defn do-robot [start-robot world]
-  "does all robot instructions, return final robot"
+  "Does all robot instructions, return final robot"
   (loop [robot start-robot]
-    (println robot)  ;; TODO remove
     (let [ticked-robot (tick-robot robot world)]
       (cond
         (empty? (:instructions robot))
@@ -124,9 +101,8 @@
 
         true (recur ticked-robot)))))
 
-
 (defn tick-world
-  "takes a world and returns new world given a robot"
+  "Takes a world and returns new world given a robot"
   [world robot]
   (let [robot (do-robot robot world)]
     (if (:lost? robot)
@@ -139,37 +115,26 @@
   (let [robots (:robots world)]
     (reduce tick-world world robots)))
 
+(defn output-robot-strings [world]
+ (doall (map (fn [robot]
+               (str (first (:position robot))
+                    " "
+                    (second (:position robot))
+                    " "
+                    (:orientation robot)
+                    (if (:lost? robot) " LOST" "")))
+             (:done-robots world))))
 
+(defn process-input-str [s]
+  (let [world (parse-input s)
+        done-world (do-world world)]
+    (str/join "\n" (output-robot-strings done-world))))
 
-
-;; TODO lost? world update
-;; TODO world loop
-
-(comment ; REPL time test runs
-  (parse-input (read-robots-file "input.robots"))
-  (read-robot-lines (rest (str/split-lines (read-robots-file "input.robots"))))
-  (read-robots-file "output.robots"))
-
-
-
-(def a-world
-  (parse-input (read-robots-file "input.robots")))
-
-(def a-robot
-  (-> a-world
-      :robots
-      second))
-
-a-robot
-(tick-robot a-robot a-world)
-(do-robot a-robot a-world)
-(do-world a-world)
-
-;;TODO tests
-
-
-
-
+(defn -main
+  "Application entry point"
+  [& [input-file-path output-file-path]]
+  (let [input (slurp input-file-path)]
+    (spit output-file-path (process-input-str input))))
 
 
 

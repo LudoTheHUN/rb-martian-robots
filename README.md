@@ -8,6 +8,12 @@ A Clojure library designed to solve the rb martian robot problem.
   * Would use https://github.com/clojure/tools.cli for a more sophisticated command line entry point.
 * Keeping template License.
 * I'm not making provisions for corrupt input (that does not conform to constraints provided). 
+* I have probably spend a little more than 3 hours on this.
+* Please note the tests.
+* I adopted a pure functional style here, without using types or records (so as to explore the solution space quickly).
+* RAM and integer numeric limits are the only limitations I can think of.
+* This solution is not optimal in RAM utilisation. Here, RAM usage scales with robots and their instructions. Could be made to scale with only world (Mars) size.
+* Some tests left as TODOs.
 
 ## Prerequisites
 
@@ -17,48 +23,42 @@ A Clojure library designed to solve the rb martian robot problem.
 
 ## Usage
 
-Single `lain` run:
+Single `lein` based run:
 
 ```
 lein run <input-filename> <output-filename>
 ```
 
-or build
+or build a java jar file with:
 
 ```
 lein uberjar
 ```
 
-and run jar artifact:
+and run jar artifact with:
 
 ```
 java -jar target/rb-martian-robots-0.1.0-SNAPSHOT-standalone.jar <input-filename> <output-filename>
-
 ```
 
-## TODOs
 
-* Test with sample data
-* KISS entry point.
+## TODOs 
+
+* DONE Test with sample data
+* DONE KISS entry point.
 * DONE read a file with input data
 * DONE parse file
-* business logic breakdown
+* DONE business logic breakdown
   * DONE rotation
   * DONE Moving
   * DONE Falling off edge
-  * leave cent
-* problem representation
-* tests in representation space
-* processing flow
-* write output file
-* build uberjar
-* test against sample data with uberjar.
-
-[comment]: <>  (
-Setting up ssh for github
-`export GIT_SSH=/Users/ludwik/code/clojure/rb-martian-robots/gitssh.sh`
-)
-
+  * DONE leave scent
+* DONE problem representation
+* DONE tests in representation space
+* DONE processing flow
+* DONE write output file
+* DONE build uberjar
+* DONE test against sample data with uberjar.
 
 
 ## License

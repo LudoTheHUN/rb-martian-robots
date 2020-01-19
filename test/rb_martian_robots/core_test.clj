@@ -14,7 +14,9 @@
   {:world-size [5 3],
    :robots [{:position [1 1], :orientation "E", :instructions ["R" "F" "R" "F" "R" "F" "R" "F"]}
             {:position [3 2], :orientation "N", :instructions ["F" "R" "R" "F" "L" "L" "F" "F" "R" "R" "F" "L" "L"]}
-            {:position [0 3], :orientation "W", :instructions ["L" "L" "F" "F" "F" "L" "F" "L" "F" "L"]}]})
+            {:position [0 3], :orientation "W", :instructions ["L" "L" "F" "F" "F" "L" "F" "L" "F" "L"]}]
+   :scents #{}
+   :done-robots []})
 
 (deftest parse-tests
   (testing "that we can parse the input string"
@@ -22,15 +24,22 @@
            (parse-input input-string))))
   (testing "minimal valid input works"
         (is (= (parse-input "3 4")
-               {:world-size [3 4], :robots []})))
+               {:world-size [3 4]
+                :robots []
+                :scents #{}
+                :done-robots []})))
   (testing "robots with no instruction input work"
     (is (= (parse-input "3 4\n1 1 E\n")
-           {:world-size [3 4],
-            :robots [{:position [1 1] :orientation "E" :instructions []}]}))
+           {:world-size [3 4]
+            :robots [{:position [1 1] :orientation "E" :instructions []}]
+            :scents #{}
+            :done-robots []}))
     (is (= (parse-input "3 4\n1 1 E\n\n\n5 5 S\nF")
-           {:world-size [3 4],
+           {:world-size [3 4]
             :robots [{:position [1 1] :orientation "E" :instructions []}
-                     {:position [5 5] :orientation "S" :instructions ["F"]}]}))))
+                     {:position [5 5] :orientation "S" :instructions ["F"]}]
+            :scents #{}
+            :done-robots []}))))
 
 (deftest rotation-identity-tests
   (testing "rotation identity"
@@ -39,39 +48,30 @@
                   (is (= orientation (reduce rotation orientation ["S" "S" "S" "S"]))))
                 ["N" "E" "S" "W"]))))
 
-(deftest robot-tick-tests
-  (let [robot1 {:position [1 1] :orientation "S" :instructions ["F"]}
+(deftest robot-tests
+  (let [robot1 {:position [1 0] :orientation "S" :instructions ["F"]}
         robot2 {:position [4 2] :orientation "S" :instructions ["R"]}
         world1 {:world-size [5 3]}
         world2 {:world-size [4 2]
-                :scents [[1 1] [4 2]]}]
+                :scents     #{[1 0] [4 2]}}]
     (testing "that we can tick a robot"
       (is (= (tick-robot robot1 world1)
-             {:position [1 0] :orientation "S" :instructions []}))
+             {:position [1 -1] :orientation "S" :instructions []}))
       (is (= (tick-robot robot2 world1)
              {:position [4 2] :orientation "W" :instructions []})))
+
     (testing "that we can use scents during a robot tick to ignore instruction"
-      (is (= (tick-robot robot1 world2)
-             {:position [1 1] :orientation "S" :instructions []}))
-      (is (= (tick-robot robot2 world2)
-             {:position [4 2] :orientation "W" :instructions []})))))
+      (is (= (do-robot robot1 world2)
+             {:position [1 0] :orientation "S" :instructions []})))))
 
+(deftest tick-world-tests)  ;; TODO
+(deftest do-world-tests)  ;; TODO
 
+(deftest example-input-test
+  (testing "that we can produce the example output by processing the input"
+    (is (= (process-input-str input-string)
+           output-string))))
 
-
-
-
-
-
+(deftest main-tests)  ;;TODO
 
 ; (run-tests)
-
-(comment
-  (use 'clojure.data)
-  (diff expected-parsed-input
-     (parse-input input-string)))
-
-
-
-
-
