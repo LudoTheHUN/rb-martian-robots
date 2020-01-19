@@ -40,12 +40,14 @@ java -jar target/rb-martian-robots-0.1.0-SNAPSHOT-standalone.jar <input-filename
 
 * Test with sample data
 * KISS entry point.
-* read a file with input data
-* parse file
+* DONE read a file with input data
+* DONE parse file
 * business logic breakdown
+  * DONE rotation
+  * Moving
+  * Falling of edge
 * problem representation
 * tests in representation space
-* encode rules
 * processing flow
 * write output file
 * build uberjar

@@ -45,8 +45,116 @@
     {:world-size world-size
      :robots (vec (map parse-robot-vector per-robot-vectors))}))
 
+(defn rotation [orientation instruction]
+    (case [orientation instruction]
+      ["N" "R"] "E"
+      ["N" "L"] "W"
+      ["E" "R"] "S"
+      ["E" "L"] "N"
+      ["S" "R"] "W"
+      ["S" "L"] "E"
+      ["W" "R"] "N"
+      ["W" "L"] "S"
+      orientation))
+
+(defn rotate-robot [robot]
+  (update-in robot [:orientation] #(rotation % (first (:instructions robot)))))
+
+(defn move-robot [robot world]
+  (if (= (first (:instructions robot)) "F")
+    (update-in robot [:position]
+               (fn [[x y]]
+                 (case (:orientation robot)
+                   "N" [x (+ y 1)]
+                   "E" [(+ x 1) y]
+                   "S" [x (- y 1)]
+                   "W" [(- x 1) y])))
+    ;;TODO handle scent logic here from world
+    robot))
+
+
+
+(defn drop-instruction [robot]
+  (update-in robot [:instructions] #(vec (rest %))))
+
+
+(move-robot {:position [3 4] :orientation "E" :instructions ["F"]} {})
+
+
+
+
+
+
+;;TODO tests
+(reduce rotation "N" ["R" "R" "R" "R"])
+(reduce rotation "N" ["S" "S" "S" "S"])
+
+
+
+(defn tick-robot
+  "Ticks through one robot instruction given a world and a robot, returns ticked robot"
+  [robot world]
+  (-> robot
+      rotate-robot
+      (move-robot world)
+      drop-instruction))
+
+(defn off-world? [robot world]
+    (let [[x y] (:position robot)
+          [wx wy] (:world-size world)]
+      (or (< x 0) (< y 0) (> x wx) (> y wy))))
+
+(defn do-robot [start-robot world]
+  (loop [robot start-robot]
+    (println robot)  ;; TODO remove
+    (let [ticked-robot (tick-robot robot world)]
+      (cond
+        (empty? (:instructions robot))
+        robot
+
+        (off-world? ticked-robot world)
+        (conj robot {:lost? true})
+
+        true (recur ticked-robot)))))
+
+
+;; TODO lost? world update
+;; TODO world loop
 
 (comment ; REPL time test runs
   (parse-input (read-robots-file "input.robots"))
   (read-robot-lines (rest (str/split-lines (read-robots-file "input.robots"))))
   (read-robots-file "output.robots"))
+
+
+
+(def a-world
+  (parse-input (read-robots-file "input.robots")))
+
+(def a-robot
+  (-> a-world
+      :robots
+      second))
+
+a-robot
+(tick-robot a-robot a-world)
+(do-robot a-robot a-world)
+
+
+(defn tick-world [world])
+
+
+(tick-world (parse-input (read-robots-file "input.robots")))
+
+;;TODO tests
+
+
+
+
+
+
+
+
+
+
+

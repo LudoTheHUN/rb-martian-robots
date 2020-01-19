@@ -32,6 +32,36 @@
             :robots [{:position [1 1] :orientation "E" :instructions []}
                      {:position [5 5] :orientation "S" :instructions ["F"]}]}))))
 
+(deftest rotation-identity-tests
+  (testing "rotation identity"
+    (doall (map (fn [orientation]
+                  (is (= orientation (reduce rotation orientation ["R" "R" "R" "R"])))
+                  (is (= orientation (reduce rotation orientation ["S" "S" "S" "S"]))))
+                ["N" "E" "S" "W"]))))
+
+(deftest robot-tick-tests
+  (let [robot1 {:position [1 1] :orientation "S" :instructions ["F"]}
+        robot2 {:position [4 2] :orientation "S" :instructions ["R"]}
+        world1 {:world-size [5 3]}
+        world2 {:world-size [4 2]
+                :scents [[1 1] [4 2]]}]
+    (testing "that we can tick a robot"
+      (is (= (tick-robot robot1 world1)
+             {:position [1 0] :orientation "S" :instructions []}))
+      (is (= (tick-robot robot2 world1)
+             {:position [4 2] :orientation "W" :instructions []})))
+    (testing "that we can use scents during a robot tick to ignore instruction"
+      (is (= (tick-robot robot1 world2)
+             {:position [1 1] :orientation "S" :instructions []}))
+      (is (= (tick-robot robot2 world2)
+             {:position [4 2] :orientation "W" :instructions []})))))
+
+
+
+
+
+
+
 
 
 ; (run-tests)
