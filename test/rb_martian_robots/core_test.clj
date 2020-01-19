@@ -24,7 +24,6 @@
         (is (= (parse-input "3 4")
                {:world-size [3 4], :robots []})))
   (testing "robots with no instruction input work"
-    ; TODO fix for robots with empty instructions.
     (is (= (parse-input "3 4\n1 1 E\n")
            {:world-size [3 4],
             :robots [{:position [1 1] :orientation "E" :instructions []}]}))
@@ -35,18 +34,12 @@
 
 
 
+; (run-tests)
 
-
-
-
-
-
-
-
-
-(use 'clojure.data)
-(diff expected-parsed-input
-   (parse-input input-string))
+(comment
+  (use 'clojure.data)
+  (diff expected-parsed-input
+     (parse-input input-string)))
 
 
 

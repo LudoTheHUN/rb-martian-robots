@@ -7,7 +7,7 @@ A Clojure library designed to solve the rb martian robot problem.
 * Basic entry point via a main function. KISS for now.
   * Would use https://github.com/clojure/tools.cli for a more sophisticated command line entry point.
 * Keeping template License.
-* I'm not making provisions for corrupt input (that does not conform to constraints provided).
+* I'm not making provisions for corrupt input (that does not conform to constraints provided). 
 
 ## Prerequisites
 
