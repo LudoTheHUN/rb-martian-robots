@@ -86,8 +86,9 @@
         [wx wy] (:world-size world)]
       (or (< x 0) (< y 0) (> x wx) (> y wy))))
 
-(defn do-robot [start-robot world]
+(defn do-robot
   "Does all robot instructions, return final robot"
+  [start-robot world]
   (loop [robot start-robot]
     (let [ticked-robot (tick-robot robot world)]
       (cond
@@ -111,7 +112,9 @@
           (update-in [:scents] #(conj % (:position robot))))
       (update-in world [:done-robots] #(conj % robot)))))  ;; TODO Not dry enough.
 
-(defn do-world [world]
+(defn do-world
+  "Process all robot instructions, updating world along the way"
+  [world]
   (let [robots (:robots world)]
     (reduce tick-world world robots)))
 
@@ -126,6 +129,7 @@
              (:done-robots world))))
 
 (defn process-input-str [s]
+  "Process input string and produce output string"
   (let [world (parse-input s)
         done-world (do-world world)]
     (str/join "\n" (output-robot-strings done-world))))

@@ -1,6 +1,6 @@
 # rb-martian-robots
 
-A Clojure library designed to solve the rb martian robot problem.
+A Clojure project designed to solve the rb martian robot problem.
 
 ## Notes for rb
 
@@ -60,6 +60,8 @@ java -jar target/rb-martian-robots-0.1.0-SNAPSHOT-standalone.jar <input-filename
 * DONE build uberjar
 * DONE test against sample data with uberjar
 * Break up single core file into namespaces
+* Produce some documentation with a docs library, eg: https://tomfaulhaber.github.io/autodoc/
+
 
 ## License
 
