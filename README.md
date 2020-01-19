@@ -58,8 +58,8 @@ java -jar target/rb-martian-robots-0.1.0-SNAPSHOT-standalone.jar <input-filename
 * DONE processing flow
 * DONE write output file
 * DONE build uberjar
-* DONE test against sample data with uberjar.
-
+* DONE test against sample data with uberjar
+* Break up single core file into namespaces
 
 ## License
 
